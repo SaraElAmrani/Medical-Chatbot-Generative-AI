@@ -1,134 +1,124 @@
-# Medical-Chatbot-Generative-AI
+# DermaAI - Intelligent Skin Disease Detection API
 
-# End-to-end-Medical-Chatbot-Generative-AI
+DermaAI is a multi-model system for skin disease classification with intelligent routing, powered by FastAPI, CNN models, and a RAG (Retrieval-Augmented Generation) system for medical explanations.
 
+## 🚀 Key Features
+- **Multi-Model Analysis**: Uses dual CNN models for accurate skin disease detection (General vs. Cancer specific).
+- **Intelligent Routing**: Automatically routes images to the most appropriate model based on initial analysis.
+- **RAG System**: Provides detailed medical explanations using Pinecone vector database and OpenAI.
+- **FastAPI Backend**: High-performance, asynchronous API.
 
-# How to run?
-### STEPS:
+---
 
-Clone the repository
+## 🛠️ Prerequisites
+- **Python**: 3.10+
+- **Anaconda** (Recommended for environment management)
 
+---
+
+## 📥 Installation
+
+### 1. Clone the repository
 ```bash
-Project repo: https://github.com/
+git clone <your-repo-url>
+cd Medical-Chatbot-Generative-AI
 ```
-### STEP 01- Create a conda environment after opening the repository
 
+### 2. Create a Conda Environment
 ```bash
-conda create -n medicalChabot python=3.10 -y
+conda create -n medicalChatbot python=3.10 -y
+conda activate medicalChatbot
 ```
 
-```bash
-conda activate medicalChabot
-```
-
-
-### STEP 02- install the requirements
+### 3. Install Requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-
-### Create a `.env` file in the root directory and add your Pinecone & openai credentials as follows:
+### 4. Set up Environment Variables
+Create a `.env` file in the root directory and add your API keys:
 
 ```ini
-PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+PINECONE_API_KEY="your_pinecone_api_key"
+OPENAI_API_KEY="your_openai_api_key"
 ```
 
-
+### 5. Initialize Knowledge Base (First Run Only)
+If you need to populate the vector database with medical data:
 ```bash
-# run the following command to store embeddings to pinecone
 python store_index.py
 ```
 
+---
+
+## 🏃‍♂️ How to Run
+
+### Option 1: Quick Start (Windows)
+Use the provided batch script to start the server and run a connectivity test:
 ```bash
-# Finally run the following command
-python app.py
+run_test.bat
+```
+*(This will start the server on port 8001 and wait for it to be ready)*
+
+### Option 2: Manual Start
+Run the FastAPI server using Uvicorn:
+```bash
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload
+```
+The API will be available at `http://localhost:8001`.
+
+---
+
+## 🧪 Testing
+
+### Integration Tests
+To verify the full pipeline (Image -> CNN -> RAG -> Response):
+```bash
+python test_integration.py
 ```
 
-Now,
+### Quick Server Check
 ```bash
-open up localhost:
+python test_server.py
 ```
 
+---
 
-### Techstack Used:
+## 📚 API Documentation
 
-- Python
-- LangChain
-- Flask
-- GPT
-- Pinecone
+Once the server is running, explore the interactive API docs:
+- **Swagger UI**: [http://localhost:8001/docs](http://localhost:8001/docs)
+- **ReDoc**: [http://localhost:8001/redoc](http://localhost:8001/redoc)
 
+---
 
-# AWS-CICD-Deployment-with-Github-Actions
+## 🚢 AWS CI/CD Deployment (GitHub Actions)
 
-## 1. Login to AWS console.
+### 1. IAM User Permissions
+Ensure the IAM user has the following policies:
+- `AmazonEC2ContainerRegistryFullAccess`
+- `AmazonEC2FullAccess`
 
-## 2. Create IAM user for deployment
+### 2. ECR Repository
+Create an ECR repository to store the Docker images:
+- URI Example: `970547337635.dkr.ecr.ap-south-1.amazonaws.com/medicalchatbot`
 
-	#with specific access
+### 3. EC2 Setup (Ubuntu)
+1. Launch an Ubuntu EC2 instance.
+2. Install Docker:
+   ```bash
+   curl -fsSL https://get.docker.com -o get-docker.sh
+   sudo sh get-docker.sh
+   sudo usermod -aG docker ubuntu
+   newgrp docker
+   ```
+3. Configure as a self-hosted runner in GitHub Settings > Actions > Runners.
 
-	1. EC2 access : It is virtual machine
-
-	2. ECR: Elastic Container registry to save your docker image in aws
-
-
-	#Description: About the deployment
-
-	1. Build docker image of the source code
-
-	2. Push your docker image to ECR
-
-	3. Launch Your EC2 
-
-	4. Pull Your image from ECR in EC2
-
-	5. Lauch your docker image in EC2
-
-	#Policy:
-
-	1. AmazonEC2ContainerRegistryFullAccess
-
-	2. AmazonEC2FullAccess
-
-	
-## 3. Create ECR repo to store/save docker image
-    - Save the URI: 970547337635.dkr.ecr.ap-south-1.amazonaws.com/medicalchatbot
-
-	
-## 4. Create EC2 machine (Ubuntu) 
-
-## 5. Open EC2 and Install docker in EC2 Machine:
-	
-	
-	#optinal
-
-	sudo apt-get update -y
-
-	sudo apt-get upgrade
-	
-	#required
-
-	curl -fsSL https://get.docker.com -o get-docker.sh
-
-	sudo sh get-docker.sh
-
-	sudo usermod -aG docker ubuntu
-
-	newgrp docker
-	
-# 6. Configure EC2 as self-hosted runner:
-    setting>actions>runner>new self hosted runner> choose os> then run command one by one
-
-
-# 7. Setup github secrets:
-
-   - AWS_ACCESS_KEY_ID
-   - AWS_SECRET_ACCESS_KEY
-   - AWS_DEFAULT_REGION
-   - ECR_REPO
-   - PINECONE_API_KEY
-   - OPENAI_API_KEY
-
-    
+### 4. GitHub Secrets
+Add the following secrets to your GitHub repository:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_DEFAULT_REGION`
+- `ECR_REPO`
+- `PINECONE_API_KEY`
+- `OPENAI_API_KEY`

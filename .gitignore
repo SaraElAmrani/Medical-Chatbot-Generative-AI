@@ -205,3 +205,32 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# Machine Learning Models
+*.h5
+*.pkl
+*.pth
+*.bin
+*.onnx
+*.pb
+*.pt
+*.keras
+*.weights
+*.joblib
+*.model
+
+# Model directories
+models/
+model/
+checkpoints/
+saved_models/
+app/model/*.keras
+app/model/*.h5
+
+# Large data files
+*.csv
+*.parquet
+data/
+datasets/
+Data/*.pdf

@@ -1,4 +1,4 @@
-sentence-transformers==2.2.2
+sentence-transformers
 langchain
 flask
 pypdf
@@ -9,3 +9,15 @@ langchain_community
 langchain_openai
 langchain_experimental
 -e .
+# FastAPI and ASGI server
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Deep Learning
+tensorflow
+numpy
+Pillow
+# Development tools (optional)
+pytest
+httpx
